@@ -1,4 +1,5 @@
 import os
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from pwdlib import PasswordHash
@@ -11,10 +12,15 @@ os.environ["ADMIN_PASSWORD_HASH"] = PasswordHash.recommended().hash("test-passwo
 os.environ["ENVIRONMENT"] = "testing"
 
 from fastapi.testclient import TestClient  # noqa: E402
+from sqlalchemy import func, select  # noqa: E402
+from sqlalchemy.orm import Session  # noqa: E402
 
+from app.core.config import settings  # noqa: E402
 from app.db.base import Base  # noqa: E402
 from app.db.session import engine  # noqa: E402
 from app.main import app  # noqa: E402
+from app.models import Team  # noqa: E402
+from app.services.registration_status import registration_status  # noqa: E402
 
 
 def payload(name: str = "Code Masters") -> dict:
@@ -48,6 +54,11 @@ client = TestClient(app)
 
 def test_health_and_registration_flow() -> None:
     assert client.get("/api/v1/health").status_code == 200
+    registration_state = client.get("/api/v1/registration-status")
+    assert registration_state.status_code == 200
+    assert registration_state.json()["is_open"] is True
+    assert registration_state.json()["server_time"]
+    assert registration_state.json()["deadline"]
     response = client.post("/api/v1/registrations", json=payload())
     assert response.status_code == 201
     result = response.json()
@@ -79,6 +90,44 @@ def test_exactly_three_and_consent_are_required() -> None:
     invalid = payload("No Consent")
     invalid["consent"] = False
     assert client.post("/api/v1/registrations", json=invalid).status_code == 422
+
+
+def test_registration_status_deadline_and_manual_override() -> None:
+    deadline = datetime(2026, 10, 10, tzinfo=timezone(timedelta(hours=6)))
+    assert registration_status(now=deadline - timedelta(seconds=1), enabled=True, deadline=deadline).is_open is True
+
+    exactly_at_deadline = registration_status(now=deadline, enabled=True, deadline=deadline)
+    assert exactly_at_deadline.is_open is False
+    assert exactly_at_deadline.reason == "deadline_passed"
+
+    after_deadline = registration_status(now=deadline + timedelta(seconds=1), enabled=True, deadline=deadline)
+    assert after_deadline.is_open is False
+    assert after_deadline.reason == "deadline_passed"
+
+    manually_closed = registration_status(now=deadline - timedelta(days=1), enabled=False, deadline=deadline)
+    assert manually_closed.is_open is False
+    assert manually_closed.reason == "manually_closed"
+
+
+def test_registration_after_deadline_is_rejected_without_persistence() -> None:
+    previous_enabled = settings.registration_enabled
+    previous_deadline = settings.registration_deadline
+    try:
+        settings.registration_enabled = True
+        settings.registration_deadline = datetime.now(timezone.utc) - timedelta(seconds=1)
+        with Session(engine) as session:
+            before = session.scalar(select(func.count(Team.id)))
+
+        response = client.post("/api/v1/registrations", json=payload("Late Team"))
+        assert response.status_code == 410
+        assert response.json() == {"detail": "Регистрация на хакатон уже завершена."}
+
+        with Session(engine) as session:
+            after = session.scalar(select(func.count(Team.id)))
+        assert after == before
+    finally:
+        settings.registration_enabled = previous_enabled
+        settings.registration_deadline = previous_deadline
 
 
 def test_admin_auth_stats_export_and_delete() -> None:

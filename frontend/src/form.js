@@ -5,7 +5,7 @@ import { normalizeKyrgyzPhone, normalizeTelegram, setFieldError, validateField, 
 
 const participantTemplate = (index) => `<section class="participant-card"><header><b>0${index + 1}</b><div><small>${index === 0 ? 'КАПИТАН' : 'УЧАСТНИК'}</small><h3>${index === 0 ? 'Капитан команды' : `Участник ${index + 1}`}</h3></div>${index === 0 ? '<span>CAPTAIN</span>' : ''}</header><div class="field-row"><div class="field"><label for="p${index}-first">Имя <em>*</em></label><input id="p${index}-first" name="participants[${index}][first_name]" required maxlength="80" autocomplete="given-name" /><span class="field-error"></span></div><div class="field"><label for="p${index}-last">Фамилия <em>*</em></label><input id="p${index}-last" name="participants[${index}][last_name]" required maxlength="80" autocomplete="family-name" /><span class="field-error"></span></div></div><div class="field"><label for="p${index}-phone">Телефон <em>*</em></label><input id="p${index}-phone" name="participants[${index}][phone]" type="tel" required inputmode="tel" placeholder="+996 555 123 456" autocomplete="tel" /><span class="field-error"></span></div><div class="field-row"><div class="field"><label for="p${index}-telegram">Telegram username</label><input id="p${index}-telegram" name="participants[${index}][telegram]" inputmode="text" placeholder="@username" autocomplete="off" /><span class="field-error"></span></div><div class="field"><label for="p${index}-email">Email</label><input id="p${index}-email" name="participants[${index}][email]" type="email" inputmode="email" placeholder="name@example.com" autocomplete="email" /><span class="field-error"></span></div></div></section>`;
 
-export function initForm() {
+export function initForm(registrationStatus) {
   const form = document.querySelector('#registration-form');
   if (!form) return;
   document.querySelector('#participants').innerHTML = [0, 1, 2].map(participantTemplate).join('');
@@ -18,10 +18,36 @@ export function initForm() {
   const submitLabel = submitButton.querySelector('span');
   const notice = document.querySelector('#form-error');
   const summary = document.querySelector('#summary');
+  const progressContainer = document.querySelector('#registration-progress');
+  const progressCurrent = document.querySelector('#registration-progress-current');
+  const closedState = document.querySelector('#registration-closed');
+  const successState = document.querySelector('#success-state');
   const stepLabels = ['Команда', 'Участники', 'Идея', 'Проверка'];
   let currentStep = 0;
   let isSubmitting = false;
+  let hasSuccessfulRegistration = false;
+  let previousRegistrationPhase = null;
   let draftTimer;
+
+  registrationStatus?.subscribe((state) => {
+    if (state.phase === previousRegistrationPhase && state.phase !== 'open') return;
+    previousRegistrationPhase = state.phase;
+    if (state.phase === 'closed' && !hasSuccessfulRegistration) {
+      form.hidden = true;
+      progressContainer.hidden = true;
+      progressCurrent.hidden = true;
+      closedState.hidden = false;
+      document.querySelector('#registration-closed-reason').textContent = state.message || 'Регистрация завершена.';
+      submitButton.disabled = true;
+      closedState.querySelector('h3')?.focus({ preventScroll: true });
+    } else if (state.phase === 'open' && !hasSuccessfulRegistration) {
+      closedState.hidden = true;
+      form.hidden = false;
+      progressContainer.hidden = false;
+      progressCurrent.hidden = false;
+      submitButton.disabled = false;
+    }
+  });
 
   const collectData = ({ normalized = true } = {}) => ({
     name: form.elements.name.value.trim(),
@@ -86,6 +112,10 @@ export function initForm() {
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     if (isSubmitting) return;
+    if (registrationStatus?.state.isOpen === false) {
+      registrationStatus.markClosed();
+      return;
+    }
     if (!validateBeforeSubmit()) return;
     isSubmitting = true;
     submitButton.disabled = true;
@@ -98,14 +128,13 @@ export function initForm() {
       clearDraft();
       showSuccess(result);
     } catch (error) {
+      if (error instanceof ApiError && (error.status === 403 || error.status === 410)) registrationStatus?.markClosed(error.message);
       handleSubmitError(error);
     } finally {
-      if (!form.hidden) {
-        isSubmitting = false;
-        submitButton.disabled = false;
-        submitButton.classList.remove('loading');
-        submitLabel.textContent = 'Подтвердить регистрацию';
-      }
+      isSubmitting = false;
+      submitButton.disabled = registrationStatus?.state.isOpen === false;
+      submitButton.classList.remove('loading');
+      submitLabel.textContent = 'Подтвердить регистрацию';
     }
   });
 
@@ -169,8 +198,12 @@ export function initForm() {
   function hideNotice(type) { if (!type || notice.classList.contains(type)) notice.hidden = true; }
 
   function showSuccess(result) {
+    hasSuccessfulRegistration = true;
     form.hidden = true;
-    const success = document.querySelector('#success-state');
+    progressContainer.hidden = true;
+    progressCurrent.hidden = true;
+    closedState.hidden = true;
+    const success = successState;
     success.hidden = false;
     document.querySelector('#success-team').textContent = result.name;
     document.querySelector('#registration-number').textContent = `#${result.registration_number}`;

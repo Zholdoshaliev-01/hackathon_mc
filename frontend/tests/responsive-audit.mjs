@@ -27,6 +27,7 @@ async function newPage(width, height) {
   const page = await context.newPage();
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
+  await page.route('**/api/v1/registration-status', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ is_open: true, deadline: '2026-10-10T00:00:00+06:00', server_time: '2026-10-06T18:30:00+06:00', reason: 'open', message: null }) }));
   return { context, page, errors };
 }
 
@@ -57,6 +58,7 @@ async function assertNoOverflow(page, label) {
 async function publicAudit(width, height) {
   const { context, page, errors } = await newPage(width, height);
   await page.goto(baseURL, { waitUntil: 'networkidle' });
+  await page.locator('#registration-countdown.open').waitFor();
   await assertNoOverflow(page, `public ${width}x${height}`);
   if (width <= 720) {
     await page.locator('.menu-toggle').click();
@@ -68,6 +70,20 @@ async function publicAudit(width, height) {
   }
   if (process.env.RESPONSIVE_SCREENSHOTS === '1') await page.screenshot({ path: resolve(screenshotDir, `public-${width}x${height}.png`), fullPage: true });
   if (errors.length) throw new Error(`public ${width}x${height}: JS errors: ${errors.join('; ')}`);
+  await context.close();
+}
+
+async function closedAudit(width, height) {
+  const { context, page, errors } = await newPage(width, height);
+  await page.unroute('**/api/v1/registration-status');
+  await page.route('**/api/v1/registration-status', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ is_open: false, deadline: '2026-10-10T00:00:00+06:00', server_time: '2026-10-10T00:00:00+06:00', reason: 'deadline_passed', message: 'Регистрация завершена.' }) }));
+  await page.goto(baseURL, { waitUntil: 'networkidle' });
+  await page.locator('#registration-countdown.closed').waitFor();
+  await page.locator('#registration-closed:not([hidden])').waitFor();
+  if (await page.locator('#registration-form:visible').count()) throw new Error(`closed ${width}x${height}: registration form is still visible`);
+  if (await page.locator('[data-registration-cta]:not(.registration-disabled)').count()) throw new Error(`closed ${width}x${height}: active registration CTA remains`);
+  await assertNoOverflow(page, `closed ${width}x${height}`);
+  if (errors.length) throw new Error(`closed ${width}x${height}: JS errors: ${errors.join('; ')}`);
   await context.close();
 }
 
@@ -144,6 +160,10 @@ for (const [width, height] of deepViewports) {
   try { await wizardAudit(width, height); process.stdout.write(`✓ wizard ${width}x${height}\n`); }
   catch (error) { failures.push(error.message); process.stderr.write(`✗ ${error.message}\n`); }
   try { await adminAudit(width, height); process.stdout.write(`✓ admin ${width}x${height}\n`); }
+  catch (error) { failures.push(error.message); process.stderr.write(`✗ ${error.message}\n`); }
+}
+for (const [width, height] of [[320, 568], [1440, 900]]) {
+  try { await closedAudit(width, height); process.stdout.write(`✓ closed ${width}x${height}\n`); }
   catch (error) { failures.push(error.message); process.stderr.write(`✗ ${error.message}\n`); }
 }
 

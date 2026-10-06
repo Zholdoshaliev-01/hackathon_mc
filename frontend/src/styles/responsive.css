@@ -155,3 +155,22 @@
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* Deadline UI follows the established responsive system. */
+@media (max-width: 720px) {
+  .hero { min-height: max(760px, 100svh); }
+  .invitation-badge { margin-bottom: 14px; }
+  .countdown { margin-top: 22px; padding: 12px; border-radius: 13px; backdrop-filter: blur(5px); box-shadow: 0 14px 35px rgba(5,40,110,.1); }
+  .countdown-heading { gap: 8px; }.countdown-heading p { font-size: 8px; letter-spacing: .1em; }
+  .countdown-grid { gap: 6px; }.countdown-grid > div { padding-inline: 4px; }.countdown-grid strong { font-size: clamp(23px, 8vw, 32px); }.countdown-grid small { font-size: 7px; letter-spacing: .04em; }
+  .registration-closed { padding: 34px 0 12px; }.closed-event { width: 100%; }.registration-closed .button { width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .countdown-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }.countdown-grid > div { padding-block: 12px 10px; }.countdown-grid strong { font-size: clamp(27px, 10vw, 34px); }
+  .closed-event { grid-template-columns: minmax(0, 1fr); }.closed-event span + span { border-left: 0; border-top: 1px solid var(--line); }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .countdown { width: min(100%, 620px); }.countdown-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}

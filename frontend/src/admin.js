@@ -2,6 +2,7 @@ import './styles/global.css';
 import './styles/admin.css';
 import { ApiError, adminLogin, adminLogout, deleteTeam, exportCsv, getAdminSession, getStats, getTeam, getTeams } from './api.js';
 import { organizations } from './i18n.js';
+import { registrationStatus, splitRemainingTime } from './registration-status.js';
 
 const loginView = document.querySelector('#login-view');
 const dashboard = document.querySelector('#dashboard');
@@ -210,4 +211,31 @@ document.querySelector('#export').addEventListener('click', async (event) => {
 });
 
 function formatDate(date) { return new Intl.DateTimeFormat('ru-RU', { dateStyle: 'short', timeStyle: 'short' }).format(new Date(date)); }
+function renderAdminRegistrationStatus(state) {
+  const container = document.querySelector('#admin-registration-status');
+  const label = document.querySelector('#admin-status-label');
+  const deadline = document.querySelector('#admin-deadline');
+  const remaining = document.querySelector('#admin-remaining');
+  const retry = document.querySelector('#admin-status-retry');
+  container.className = `admin-registration-status ${state.phase}`;
+  retry.hidden = state.phase !== 'error';
+  deadline.textContent = state.deadline ? new Intl.DateTimeFormat('ru-RU', { timeZone: 'Asia/Bishkek', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(state.deadline)) : '—';
+  if (state.phase === 'open') {
+    const value = splitRemainingTime(state.remainingTime);
+    label.textContent = 'OPEN';
+    remaining.textContent = `${value.days} дн. ${value.hours} ч. ${value.minutes} мин.`;
+  } else if (state.phase === 'closed') {
+    label.textContent = 'CLOSED';
+    remaining.textContent = 'Регистрация закрыта.';
+  } else if (state.phase === 'error') {
+    label.textContent = 'НЕИЗВЕСТНО';
+    remaining.textContent = 'Не удалось проверить статус.';
+  } else {
+    label.textContent = 'ПРОВЕРЯЕМ…';
+    remaining.textContent = '—';
+  }
+}
+document.querySelector('#admin-status-retry').addEventListener('click', () => registrationStatus.sync().catch(() => {}));
+registrationStatus.subscribe(renderAdminRegistrationStatus);
+registrationStatus.start();
 boot();

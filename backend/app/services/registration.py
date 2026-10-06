@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session, selectinload
 
 from app.models import Participant, Team
 from app.schemas.registration import RegistrationCreate
+from app.services.registration_status import ensure_registration_open
 
 
 def _registration_number() -> str:
@@ -14,6 +15,8 @@ def _registration_number() -> str:
 
 
 def create_registration(db: Session, payload: RegistrationCreate) -> Team:
+    # Check before touching the database so a closed registration never starts DB work.
+    ensure_registration_open()
     existing_name = db.scalar(select(Team.id).where(func.lower(Team.name) == payload.name.casefold()))
     if existing_name:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Команда с таким названием уже зарегистрирована.")
@@ -22,6 +25,9 @@ def create_registration(db: Session, payload: RegistrationCreate) -> Team:
     if existing_phone:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail={"message": "Участник с таким номером телефона уже зарегистрирован.", "phone": existing_phone})
 
+    # Duplicate checks may take long enough to cross the deadline. Recheck immediately
+    # before constructing and adding the aggregate to close that race window.
+    ensure_registration_open()
     try:
         team = Team(
             registration_number=_unique_registration_number(db),
@@ -62,4 +68,3 @@ def get_registration(db: Session, team_id: int) -> Team:
     if not team:
         raise HTTPException(status_code=404, detail="Регистрация не найдена.")
     return team
-

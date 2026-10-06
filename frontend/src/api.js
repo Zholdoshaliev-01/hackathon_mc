@@ -2,6 +2,7 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api/v1';
 const DEFAULT_TIMEOUT = 12_000;
 
 const STATUS_MESSAGES = {
+  410: 'Регистрация на хакатон уже завершена.',
   400: 'Проверьте введённые данные.', 401: 'Требуется авторизация.',
   403: 'Недостаточно прав для выполнения действия.', 404: 'Запрашиваемые данные не найдены.',
   409: 'Такая регистрация уже существует.', 422: 'Проверьте правильность заполнения формы.',
@@ -94,6 +95,7 @@ async function parseResponse(response) {
 function filenameFrom(response) { return response.headers.get('content-disposition')?.match(/filename="?([^";]+)"?/i)?.[1] || 'hackathon-teams.csv'; }
 
 export const registerTeam = (payload) => apiRequest('/registrations', { method: 'POST', body: JSON.stringify(payload) });
+export const getRegistrationStatus = () => apiRequest('/registration-status');
 export const adminLogin = (credentials) => apiRequest('/admin/auth/login', { method: 'POST', body: JSON.stringify(credentials) });
 export const adminLogout = () => apiRequest('/admin/auth/logout', { method: 'POST' });
 export const getAdminSession = () => apiRequest('/admin/auth/me');
@@ -103,4 +105,4 @@ export const getStats = () => apiRequest('/admin/stats');
 export const deleteTeam = (id) => apiRequest(`/admin/teams/${id}`, { method: 'DELETE' });
 export const exportCsv = () => apiRequest('/admin/export/csv', { responseType: 'blob' });
 
-export const api = { register: registerTeam, admin: { login: adminLogin, logout: adminLogout, me: getAdminSession, stats: getStats, teams: getTeams, team: getTeam, deleteTeam, exportCsv } };
+export const api = { register: registerTeam, registrationStatus: getRegistrationStatus, admin: { login: adminLogin, logout: adminLogout, me: getAdminSession, stats: getStats, teams: getTeams, team: getTeam, deleteTeam, exportCsv } };

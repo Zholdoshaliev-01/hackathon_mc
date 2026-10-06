@@ -107,3 +107,16 @@ dialog { width: min(calc(100% - 24px), 680px); max-width: 680px; max-height: 90d
 @media (prefers-reduced-motion: reduce) {
   .skeleton span, .skeleton-card, .admin-spinner { animation: none; }
 }
+
+/* Registration status uses the same data source as the public countdown. */
+.admin-registration-status { min-width: 0; margin-bottom: 12px; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; gap: 24px; border: 1px solid #263a59; border-radius: 13px; background: linear-gradient(135deg, #0d192b, #09111f); }
+.admin-registration-status > div > small { display: block; color: #70809a; font: 700 8px 'JetBrains Mono'; letter-spacing: .13em; }.admin-registration-status > div > strong { display: block; margin-top: 7px; color: #ffbc70; font: 800 18px 'JetBrains Mono'; }.admin-registration-status.open > div > strong { color: #58e3ba; }.admin-registration-status.closed > div > strong { color: #ff91a4; }
+.admin-registration-status dl { min-width: 0; margin: 0; display: flex; gap: 34px; }.admin-registration-status dl div { min-width: 0; }.admin-registration-status dt { color: #65748b; font-size: 9px; }.admin-registration-status dd { margin: 5px 0 0; color: #d4ddeb; font-size: 12px; overflow-wrap: anywhere; }.admin-registration-status button { min-height: 38px; padding: 0 13px; border: 1px solid #345279; border-radius: 7px; color: var(--cyan); background: #0a1729; cursor: pointer; }
+
+@media (max-width: 600px) {
+  .admin-registration-status { align-items: flex-start; flex-direction: column; gap: 16px; }.admin-registration-status dl { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }.admin-registration-status button { width: 100%; }
+}
+
+@media (max-width: 359px) {
+  .admin-registration-status dl { grid-template-columns: minmax(0, 1fr); }
+}
