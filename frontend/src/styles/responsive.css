@@ -174,3 +174,41 @@
 @media (max-height: 500px) and (orientation: landscape) {
   .countdown { width: min(100%, 620px); }.countdown-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
+
+/* Hero composition: two columns above tablet, semantic single-column flow below. */
+@media (max-width: 1100px) and (min-width: 901px) {
+  .hero-content { grid-template-columns: minmax(0, 1.12fr) minmax(330px, .88fr); column-gap: 38px; }
+  .hero h1 { font-size: clamp(61px, 7.5vw, 84px); }
+  .hero-story { padding: 28px; }.hero-story h2 { font-size: clamp(31px, 3.6vw, 40px); }
+  .hero-badges span { padding-inline: 8px; }
+}
+
+@media (max-width: 900px) {
+  .hero { min-height: auto; padding: calc(112px + env(safe-area-inset-top)) 24px 72px; place-items: start center; }
+  .hero::after { opacity: .12; background: linear-gradient(transparent 58%, rgba(79,128,204,.12) 58%, transparent calc(58% + 1px)); }
+  .hero-content { width: min(100%, 680px); grid-template-columns: minmax(0, 1fr); grid-template-areas: 'primary' 'story' 'event' 'countdown' 'actions'; gap: 26px; }
+  .hero-primary, .hero-story, .hero-event, .hero .countdown, .hero-actions { width: 100%; }
+  .hero h1 { font-size: clamp(62px, 12vw, 92px); }.hero h1 span { margin-top: 10px; }
+  .hero-story { padding: 26px; }.hero-story h2 { font-size: clamp(32px, 6.5vw, 45px); }.hero-story .sequence { margin-top: 24px; }
+  .hero .countdown { margin: 0; }.hero-actions { margin: 0; }
+}
+
+@media (max-width: 720px) {
+  .hero { min-height: auto; padding: calc(96px + env(safe-area-inset-top)) 16px 58px; }
+  .hero-content { gap: 22px; }
+  .hero .invitation-badge { margin-bottom: 15px; }
+  .hero .eyebrow { margin-bottom: 16px; font-size: 9px; line-height: 1.5; }
+  .hero h1 { font-size: clamp(48px, 15.3vw, 76px); line-height: .84; letter-spacing: -.067em; }.hero h1 span { letter-spacing: .06em; }
+  .hero-story { padding: 21px 18px; border-radius: 16px; backdrop-filter: blur(4px); }.story-kicker { margin-bottom: 15px; font-size: 8px; }.hero-story h2 { font-size: clamp(27px, 8.7vw, 39px); line-height: 1.01; }.hero-story .sequence { margin: 21px 0 14px; font-size: 8px; }.hero-story-copy { font-size: 13px; }
+  .event-lead { font-size: 10px; }.event-lead strong { font-size: 12px; }.team-rule { max-width: 100%; font-size: 9px; line-height: 1.5; }
+  .hero-badges { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }.hero-badges span { width: 100%; padding: 9px 8px; font-size: 8px; overflow-wrap: anywhere; }
+  .hero .countdown { padding: 12px; }.hero-actions { flex-direction: column; }.hero-actions .button { width: 100%; min-height: 52px; }
+}
+
+@media (max-width: 359px) {
+  .hero { padding-inline: 12px; }.hero h1 { font-size: clamp(46px, 15.1vw, 52px); }.hero-story { padding-inline: 15px; }.hero-badges { gap: 6px; }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero { min-height: auto; padding-block: 92px 48px; }.hero-content { width: min(100%, 760px); }.hero h1 { font-size: clamp(56px, 9vw, 76px); }
+}

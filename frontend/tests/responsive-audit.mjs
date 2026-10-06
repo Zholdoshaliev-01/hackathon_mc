@@ -67,6 +67,7 @@ async function publicAudit(width, height) {
     await assertNoOverflow(page, `menu ${width}x${height}`);
     await page.keyboard.press('Escape');
     if (await page.locator('#nav.open').count()) throw new Error(`menu ${width}x${height}: Escape did not close navigation`);
+    await page.waitForTimeout(250);
   }
   if (process.env.RESPONSIVE_SCREENSHOTS === '1') await page.screenshot({ path: resolve(screenshotDir, `public-${width}x${height}.png`), fullPage: true });
   if (errors.length) throw new Error(`public ${width}x${height}: JS errors: ${errors.join('; ')}`);
