@@ -1,5 +1,5 @@
 .admin-body { min-height: 100vh; background: #060a13; }.admin-logo { display: flex; align-items: center; gap: 10px; color: white; font: 700 10px/1.5 'JetBrains Mono'; letter-spacing: .06em; }.admin-logo > span { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid #263752; color: #55d7ff; }
-.login-page { min-height: 100vh; display: grid; place-items: center; padding: 22px; background: radial-gradient(circle at 50% 15%, rgba(40,102,231,.16), transparent 36%), linear-gradient(rgba(55,95,160,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(55,95,160,.06) 1px, transparent 1px); background-size: auto, 60px 60px, 60px 60px; }.login-card { width: min(100%, 420px); padding: 36px; border: 1px solid var(--line); border-radius: 20px; background: rgba(9,16,30,.94); box-shadow: 0 30px 80px rgba(0,0,0,.4); }.login-card .kicker { margin: 44px 0 8px; }.login-card h1 { margin: 0; font-size: 30px; letter-spacing: -.04em; }.login-card > p:not(.kicker) { color: var(--muted); font-size: 12px; line-height: 1.6; margin-bottom: 28px; }.login-card label { display: block; color: #c7d1e2; font-size: 11px; font-weight: 600; margin-top: 17px; }.login-card input { width: 100%; height: 48px; margin-top: 8px; padding: 0 13px; border: 1px solid #293a57; border-radius: 9px; outline: 0; color: white; background: #070d18; }.login-card input:focus { border-color: var(--blue); }.login-card .admin-button { width: 100%; margin-top: 23px; }.login-card > a:last-child { display: block; margin-top: 22px; color: #72819b; font-size: 10px; text-align: center; }.admin-error { color: #ff8da1; margin-top: 15px; font-size: 11px; }
+.login-page { min-height: 100vh; display: grid; place-items: center; padding: 22px; background: radial-gradient(circle at 50% 15%, rgba(40,102,231,.16), transparent 36%), linear-gradient(rgba(55,95,160,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(55,95,160,.06) 1px, transparent 1px); background-size: auto, 60px 60px, 60px 60px; }.login-card { width: min(100%, 420px); padding: 36px; border: 1px solid var(--line); border-radius: 20px; background: rgba(9,16,30,.94); box-shadow: 0 30px 80px rgba(0,0,0,.4); }.login-card .kicker { margin: 44px 0 8px; }.login-card h1 { margin: 0; font-size: 30px; letter-spacing: -.04em; }.login-card > p:not(.kicker) { color: var(--muted); font-size: 12px; line-height: 1.6; margin-bottom: 28px; }.login-card label { display: block; color: #c7d1e2; font-size: 11px; font-weight: 600; margin-top: 17px; }.login-card input { width: 100%; height: 48px; margin-top: 8px; padding: 0 13px; border: 1px solid #293a57; border-radius: 9px; outline: 0; color: white; background: #070d18; }.login-card input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(48,124,255,.12); }.password-field { position: relative; }.password-field input { padding-right: 82px; }.password-field button { position: absolute; right: 8px; top: 16px; height: 32px; padding: 0 8px; border: 0; color: var(--cyan); background: transparent; font-size: 9px; cursor: pointer; }.login-card .admin-button { width: 100%; margin-top: 23px; }.login-card > a:last-child { display: block; margin-top: 22px; color: #72819b; font-size: 10px; text-align: center; }.admin-error { padding: 10px 12px; border: 1px solid rgba(255,89,121,.3); border-radius: 8px; color: #ff9bad; background: rgba(255,61,99,.07); margin-top: 15px; font-size: 11px; line-height: 1.5; }
 .admin-button { height: 44px; padding: 0 18px; border: 1px solid #387cec; border-radius: 8px; color: white; background: #1e69df; font: 700 10px 'JetBrains Mono'; text-transform: uppercase; letter-spacing: .05em; cursor: pointer; }.admin-button.secondary { border-color: #2c3d59; background: #101a2b; }.admin-button:disabled { opacity: .6; }.admin-spinner { display: none; width: 13px; height: 13px; border: 2px solid #ffffff55; border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; margin-left: 8px; }.admin-button.loading .admin-spinner { display: inline-block; }
 .dashboard { min-height: 100vh; padding-left: 210px; }.dashboard > aside { position: fixed; inset: 0 auto 0 0; width: 210px; padding: 26px 20px; border-right: 1px solid var(--line); background: #080d18; display: flex; flex-direction: column; }.dashboard aside nav { margin-top: 70px; }.dashboard aside nav a, .dashboard aside button { display: flex; width: 100%; align-items: center; gap: 12px; padding: 12px; border: 0; border-radius: 8px; color: #7f8da5; background: transparent; font-size: 11px; cursor: pointer; }.dashboard aside nav a.active { color: white; background: #111c30; }.dashboard aside button { margin-top: auto; }.admin-main { max-width: 1400px; padding: 45px clamp(22px, 4vw, 60px); margin: auto; }.admin-main > header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; }.admin-main h1 { margin: 7px 0 0; font-size: 38px; letter-spacing: -.05em; }
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 22px; }.stats article { padding: 22px; border: 1px solid var(--line); border-radius: 13px; background: linear-gradient(145deg, #0c1424, #090f1c); }.stats small { display: block; min-height: 24px; color: #71809a; font: 600 8px/1.4 'JetBrains Mono'; letter-spacing: .1em; }.stats strong { display: block; margin-top: 10px; font-size: 30px; }
@@ -7,3 +7,103 @@
 dialog { width: min(92vw, 680px); max-height: 88vh; padding: 34px; overflow-y: auto; border: 1px solid #304360; border-radius: 18px; color: white; background: #0a111f; box-shadow: 0 30px 90px #000; }dialog::backdrop { background: rgba(0,4,12,.76); backdrop-filter: blur(6px); }.dialog-close { position: absolute; right: 20px; top: 18px; border: 0; color: #8492a9; background: none; font-size: 24px; cursor: pointer; }#team-detail h2 { margin: 7px 0; font-size: 32px; }.detail-org { color: var(--muted); font-size: 11px; }.detail-project { margin: 28px 0; padding: 18px; border: 1px solid var(--line); border-radius: 11px; background: #070d18; }.detail-project small, .detail-participants small { color: #66758e; font: 600 8px 'JetBrains Mono'; letter-spacing: .1em; }.detail-project strong { display: block; margin-top: 8px; }.detail-project p { color: #929fb4; font-size: 11px; line-height: 1.6; white-space: pre-wrap; }.detail-participants { display: grid; gap: 9px; }.detail-participants article { padding: 15px; border: 1px solid var(--line); border-radius: 9px; }.detail-participants strong, .detail-participants a, .detail-participants span { display: block; margin-top: 5px; }.detail-participants a { color: var(--cyan); font: 10px 'JetBrains Mono'; }.detail-participants span { color: #7f8ca2; font-size: 9px; }.delete-team { margin-top: 28px; padding: 10px 14px; border: 1px solid #673143; border-radius: 7px; color: #ff819a; background: #1c0d14; font-size: 9px; cursor: pointer; }
 @media (max-width: 850px) { .dashboard { padding-left: 64px; }.dashboard > aside { width: 64px; padding: 22px 10px; }.dashboard .admin-logo { font-size: 0; }.dashboard aside nav a span, .dashboard aside button span { display: none; }.stats { grid-template-columns: 1fr 1fr; }.admin-main { padding: 28px 18px; } }
 @media (max-width: 560px) { .login-card { padding: 28px 22px; }.admin-main > header { align-items: flex-start; gap: 16px; flex-direction: column; }.stats { grid-template-columns: 1fr; }.toolbar { align-items: stretch; flex-direction: column; }.toolbar > span { text-align: left; }.toolbar select { width: 100%; }dialog { padding: 27px 18px; } }
+
+/* Responsive admin primitives and mobile card representation. */
+.admin-body, .dashboard, .admin-main, .table-card, .table-wrap { min-width: 0; max-width: 100%; }
+.admin-body, .dashboard { min-height: 100dvh; }
+.login-page { width: 100%; min-height: 100dvh; padding: max(20px, env(safe-area-inset-top)) 20px max(20px, env(safe-area-inset-bottom)); }
+.login-card { min-width: 0; }
+.login-card input, .toolbar input, .toolbar select { min-width: 0; }
+.filter-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.team-cards { display: none; }
+dialog { width: min(calc(100% - 24px), 680px); max-width: 680px; max-height: 90dvh; margin: auto; }
+.dialog-close { display: grid; place-items: center; width: 44px; height: 44px; right: 10px; top: 8px; padding: 0; }
+.detail-project, .detail-participants article, #team-detail { min-width: 0; overflow-wrap: anywhere; }
+.detail-participants a { white-space: nowrap; }
+.delete-team { min-height: 44px; }
+
+@media (max-width: 850px) {
+  .admin-main > header { gap: 20px; }
+  .toolbar > * { min-width: 0; }
+  .stats article { min-width: 0; }
+}
+
+@media (max-width: 768px) {
+  .dashboard { padding: 0 0 calc(72px + env(safe-area-inset-bottom)); }
+  .dashboard > aside { inset: auto 0 0; z-index: 50; width: 100%; height: calc(64px + env(safe-area-inset-bottom)); padding: 6px 10px env(safe-area-inset-bottom); flex-direction: row; align-items: center; border-top: 1px solid var(--line); border-right: 0; background: rgba(8,13,24,.96); backdrop-filter: blur(12px); }
+  .dashboard aside .admin-logo { display: none; }
+  .dashboard aside nav { display: flex; flex: 1; min-width: 0; margin: 0; }
+  .dashboard aside nav a, .dashboard aside button { width: auto; min-width: 48px; min-height: 48px; margin: 0; padding: 10px 12px; justify-content: center; }
+  .dashboard aside nav a { flex: 1; }
+  .dashboard aside nav a span, .dashboard aside button span { display: inline; }
+  .admin-main { width: 100%; padding: 28px 16px; }
+  .admin-main h1 { font-size: clamp(30px, 8vw, 38px); }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stats article { padding: 18px; }
+  .stats strong { font-size: 27px; }
+  .table-wrap { overflow: visible; }
+  .table-wrap table { display: none; }
+  .team-cards { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 12px; }
+  .admin-team-card { min-width: 0; padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: linear-gradient(145deg, #0c1424, #090f1c); cursor: pointer; }
+  .admin-team-card:focus-visible { border-color: var(--cyan); }
+  .admin-team-card header { display: flex; min-width: 0; align-items: flex-start; justify-content: space-between; gap: 10px; }
+  .admin-team-card header > div { min-width: 0; }
+  .admin-team-card h3 { margin: 6px 0 0; color: #eef3fc; font-size: 16px; line-height: 1.35; overflow-wrap: anywhere; }
+  .admin-team-card .org { flex: 0 1 auto; max-width: 48%; white-space: normal; line-height: 1.4; text-align: center; }
+  .admin-team-card dl { display: grid; grid-template-columns: minmax(80px, .7fr) minmax(0, 1.3fr); gap: 9px 12px; margin: 18px 0; }
+  .admin-team-card dt { color: #68768e; font-size: 11px; }
+  .admin-team-card dd { min-width: 0; margin: 0; color: #bec9da; font-size: 12px; overflow-wrap: anywhere; }
+  .admin-team-card dd.mono { white-space: nowrap; }
+  .card-action { width: 100%; min-height: 44px; border: 1px solid #2c4568; border-radius: 8px; color: var(--cyan); background: #0c1729; font: 600 10px 'JetBrains Mono'; cursor: pointer; }
+  .skeleton-card { min-height: 210px; background: linear-gradient(90deg, #101927, #18253a, #101927); background-size: 200%; animation: shimmer 1.3s infinite; }
+  .admin-empty { padding: 28px 16px; }
+  dialog { padding: 50px 18px 22px; }
+  #team-detail h2 { padding-right: 30px; font-size: clamp(25px, 8vw, 32px); overflow-wrap: anywhere; }
+}
+
+@media (max-width: 600px) {
+  .admin-main > header { align-items: stretch; flex-direction: column; }
+  .admin-main > header .admin-button { width: 100%; min-height: 46px; }
+  .toolbar { align-items: stretch; flex-direction: column; padding: 12px; }
+  .toolbar .search, .toolbar input, .toolbar select { width: 100%; }
+  .toolbar input, .toolbar select { min-height: 46px; font-size: 16px; }
+  .toolbar > span { min-width: 0; text-align: left; font-size: 11px; }
+  .detail-project { padding: 15px; }
+}
+
+@media (max-width: 480px) {
+  .login-page { align-items: center; padding-inline: 12px; }
+  .login-card { width: 100%; max-width: 420px; padding: 25px 18px; border-radius: 16px; }
+  .login-card .kicker { margin-top: 34px; }
+  .login-card h1 { font-size: clamp(25px, 9vw, 30px); overflow-wrap: anywhere; }
+  .login-card > p:not(.kicker) { font-size: 14px; }
+  .login-card label { font-size: 13px; }
+  .login-card input { min-width: 0; height: 50px; font-size: 16px; }
+  .password-field button { min-width: 68px; min-height: 44px; top: 11px; }
+  .login-card .admin-button { min-height: 48px; }
+  .admin-main { padding-inline: 12px; }
+  .team-cards { padding: 10px; }
+  .admin-team-card { padding: 14px; }
+  .admin-team-card header { flex-direction: column; }
+  .admin-team-card .org { max-width: 100%; }
+  .dashboard aside nav a span { font-size: 10px; }
+  .dashboard aside button span { display: none; }
+  dialog { width: calc(100% - 16px); max-height: 92dvh; padding-inline: 14px; }
+  .detail-participants article { padding: 13px; }
+}
+
+@media (max-width: 359px) {
+  .stats { grid-template-columns: minmax(0, 1fr); }
+  .admin-team-card dl { grid-template-columns: minmax(0, 1fr); gap: 3px; }
+  .admin-team-card dd { margin-bottom: 8px; }
+  .dashboard aside nav a span { display: none; }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .login-page { align-items: start; }
+  dialog { max-height: 94dvh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton span, .skeleton-card, .admin-spinner { animation: none; }
+}

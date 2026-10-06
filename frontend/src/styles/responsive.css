@@ -1,12 +1,157 @@
+/* Tablet: denser sections and balanced 2 × 2 content grids. */
+@media (max-width: 1100px) {
+  .info-grid, .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .step:nth-child(2) { border-right: 0; }
+  .step:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
+  .registration { gap: 36px; }
+}
+
 @media (max-width: 960px) {
-  .section { padding-block: 95px; }.section-heading { grid-template-columns: 1fr; gap: 25px; }.info-grid { grid-template-columns: 1fr 1fr; }.steps { grid-template-columns: 1fr 1fr; }.step:nth-child(2) { border-right: 0; }.step:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
-  .registration { grid-template-columns: 1fr; }.registration-intro { position: static; max-width: 620px; }.hero-meta div { min-width: auto; }.battle-stage { gap: 25px; }
+  .section { padding-block: clamp(76px, 10vw, 96px); }
+  .section-heading { grid-template-columns: minmax(0, 1fr); gap: 24px; margin-bottom: 46px; }
+  .section-heading > p { max-width: 620px; }
+  .registration { grid-template-columns: minmax(0, 1fr); }
+  .registration-intro { position: static; max-width: 650px; }
+  .battle-stage { gap: 24px; }
+  .hero-meta div { min-width: 0; }
 }
+
+/* Mobile navigation and content flow. */
 @media (max-width: 720px) {
-  .header { height: 68px; padding-inline: 18px; }.menu-toggle { display: block; z-index: 2; }.nav { position: fixed; inset: 0; padding: 110px 28px 40px; flex-direction: column; align-items: stretch; gap: 0; background: rgba(5,8,17,.97); backdrop-filter: blur(20px); transform: translateX(100%); transition: transform .25s; }.nav.open { transform: none; }.nav > a { padding: 18px 0; font-size: 18px; border-bottom: 1px solid var(--line); }.nav .button { margin-top: 25px; }.menu-open { overflow: hidden; }
-  .hero { min-height: 760px; height: auto; padding: 125px 18px 80px; }.hero::before { width: 110vw; }.hero h1 { font-size: clamp(62px, 22vw, 94px); line-height: .8; }.hero h1 span { letter-spacing: .02em; }.sequence { gap: 6px; flex-wrap: wrap; font-size: 9px; }.hero-description { font-size: 14px; }.hero-actions { flex-direction: column; width: min(100%, 380px); margin-inline: auto; }.hero-meta { display: grid; grid-template-columns: 1fr 1fr; width: 100%; gap: 20px; }.hero-meta div { padding: 0 15px; }.hero-meta div:nth-child(2) { border: 0; }.hero-meta div:nth-child(3) { grid-column: 1/-1; text-align: center; }.hero-code, .scroll-hint { display: none; }
-  .section { padding: 78px 18px; }.section-heading h2, .registration-intro h2 { font-size: 43px; }.info-grid, .steps { grid-template-columns: 1fr; }.info-card { min-height: 255px; }.step { min-height: 265px; border-right: 0; border-bottom: 1px solid var(--line) !important; }.step:last-child { border-bottom: 0 !important; }.step > span { margin: 40px 0 30px; }
-  .battle-stage { grid-template-columns: 1fr; gap: 24px; }.battle-stage > div, .battle-stage > div:last-child { text-align: center; }.battle-stage > b { width: 64px; height: 64px; margin: auto; font-size: 18px; }.battle-stage strong { font-size: 48px; }
-  .form-shell { padding: 24px 16px; border-radius: 18px; }.progress button span { display: none; }.field-row { grid-template-columns: 1fr; gap: 0; }.participant-card { padding: 18px 14px; }.form-actions { flex-wrap: wrap; }.form-actions .button { flex: 1; min-width: 140px; padding-inline: 12px; font-size: 10px; }.form-actions .button-ghost { order: 2; flex-basis: 100%; margin: 0; }.footer { grid-template-columns: 1fr; gap: 20px; padding-inline: 18px; }
+  html { scroll-padding-top: 76px; }
+  body { font-size: 15px; }
+  .header { height: calc(68px + env(safe-area-inset-top)); padding: env(safe-area-inset-top) 16px 0; }
+  .header.scrolled { height: calc(64px + env(safe-area-inset-top)); }
+  .header .brand { max-width: calc(100% - 56px); font-size: 9px; }
+  .header .brand-mark { flex: 0 0 34px; width: 34px; height: 34px; }
+  .menu-toggle { display: block; flex: 0 0 44px; z-index: 102; }
+  .menu-toggle[aria-expanded="true"] span:first-child { transform: translateY(3.5px) rotate(45deg); }
+  .menu-toggle[aria-expanded="true"] span:last-child { transform: translateY(-3.5px) rotate(-45deg); }
+  .nav { position: fixed; inset: 0; z-index: 101; min-width: 0; padding: calc(90px + env(safe-area-inset-top)) 20px calc(24px + env(safe-area-inset-bottom)); flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 0; overflow-y: auto; background: rgba(5,8,17,.98); backdrop-filter: blur(12px); transform: translateX(100%); visibility: hidden; transition: transform .2s ease, visibility .2s; }
+  .nav.open { transform: none; visibility: visible; }
+  .nav > a { min-height: 54px; padding: 15px 4px; display: flex; align-items: center; border-bottom: 1px solid var(--line); font-size: 17px; }
+  .nav .button { width: 100%; margin-top: 24px; justify-content: center; }
+  .menu-open { overflow: hidden; touch-action: none; }
+
+  .hero { min-height: max(650px, 100svh); padding: calc(104px + env(safe-area-inset-top)) 18px 64px; }
+  .hero::before { width: min(115vw, 520px); box-shadow: 0 0 55px rgba(32,102,255,.07), inset 0 0 55px rgba(32,102,255,.05); }
+  .hero-grid { opacity: .17; background-size: 52px 52px; }
+  .orb { filter: blur(58px); opacity: .12; }
+  .orb-one { width: 230px; height: 230px; }
+  .orb-two { width: 200px; height: 200px; }
+  .hero h1 { max-width: 100%; font-size: clamp(46px, 15.3vw, 82px); line-height: .82; letter-spacing: -.065em; }
+  .hero h1 span { letter-spacing: .025em; }
+  .hero .eyebrow { margin-bottom: 20px; font-size: 9px; overflow-wrap: anywhere; }
+  .sequence { gap: 6px 8px; margin: 30px 0 19px; flex-wrap: wrap; font-size: 9px; letter-spacing: .08em; }
+  .hero-description { font-size: 14px; line-height: 1.65; }
+  .hero-actions { width: min(100%, 390px); margin-inline: auto; flex-direction: column; }
+  .hero-actions .button { width: 100%; min-height: 52px; padding-inline: 14px; }
+  .hero-meta { width: min(100%, 430px); margin-top: 38px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 0; }
+  .hero-meta div { min-width: 0; padding: 0 14px; }
+  .hero-meta div:nth-child(2) { border-right: 0; }
+  .hero-meta div:nth-child(3) { grid-column: 1 / -1; text-align: center; }
+  .hero-meta strong { display: block; font-size: 11px; line-height: 1.45; overflow-wrap: anywhere; }
+  .hero-code, .scroll-hint { display: none; }
+
+  .section { padding: 72px 16px; }
+  .section-heading { margin-bottom: 36px; }
+  .section-heading h2, .registration-intro h2 { font-size: clamp(38px, 12vw, 50px); }
+  .section-heading > p, .section-heading.row > p, .registration-intro > p:not(.kicker) { font-size: 14px; line-height: 1.7; }
+  .info-grid, .steps { grid-template-columns: minmax(0, 1fr); }
+  .info-card { width: 100%; min-height: 230px; padding: 24px; }
+  .info-card small { margin-bottom: 38px; }
+  .info-card p, .step p { font-size: 14px; }
+  .step { width: 100%; min-height: 238px; padding: 24px; border-right: 0; border-bottom: 1px solid var(--line); }
+  .step:last-child { border-bottom: 0; }
+  .step > span { width: 62px; height: 62px; margin: 32px 0 26px; }
+
+  .battle-stage { grid-template-columns: minmax(0, 1fr); gap: 22px; margin-block: 46px 32px; }
+  .battle-stage > div, .battle-stage > div:last-child { min-width: 0; text-align: center; }
+  .battle-stage > b { width: 62px; height: 62px; margin: auto; font-size: 17px; }
+  .battle-stage strong { font-size: clamp(38px, 13vw, 54px); overflow-wrap: anywhere; }
+
+  .registration-intro ul { font-size: 13px; }
+  .form-shell { width: 100%; min-width: 0; padding: 22px 16px; border-radius: 18px; box-shadow: 0 18px 55px rgba(0,0,0,.28); }
+  .progress { margin-bottom: 8px; grid-template-columns: repeat(4, minmax(44px, 1fr)); }
+  .progress-line { left: 12.5%; right: 12.5%; }
+  .progress button { min-width: 44px; min-height: 48px; padding: 0; }
+  .progress button span { display: none; }
+  .progress b { width: 36px; height: 36px; margin-bottom: 0; font-size: 11px; }
+  .progress-current { display: flex; min-height: 46px; margin: 0 0 28px; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 13px; border-bottom: 1px solid var(--line); }
+  .progress-current small { color: #71809a; font: 600 10px 'JetBrains Mono'; }
+  .progress-current strong { font-size: 14px; }
+  legend { font-size: clamp(21px, 7vw, 26px); line-height: 1.2; }
+  .step-copy { margin-bottom: 24px; font-size: 14px; }
+  .field-row { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .field { min-width: 0; margin-bottom: 16px; }
+  .field label { font-size: 13px; }
+  .field input, .field select, .field textarea { width: 100%; min-width: 0; min-height: 48px; padding-inline: 13px; font-size: 16px; }
+  .field textarea { min-height: 132px; padding-block: 13px; }
+  .field-error { font-size: 12px; line-height: 1.4; }
+  .participant-card { width: 100%; margin: 14px 0; padding: 17px 14px 8px; border-radius: 13px; }
+  .participant-card header { min-width: 0; margin-bottom: 18px; gap: 10px; }
+  .participant-card header > div { min-width: 0; }
+  .participant-card header > span { flex: 0 0 auto; }
+  .participant-card h3 { overflow-wrap: anywhere; }
+  .form-notice { width: 100%; min-width: 0; grid-template-columns: 30px minmax(0, 1fr) 44px; gap: 9px; padding: 13px 8px 13px 12px; }
+  .notice-icon { flex-shrink: 0; }
+  .notice-message { font-size: 12px; }
+  .consent { min-width: 0; gap: 11px; font-size: 13px; }
+  .consent input { flex: 0 0 22px; width: 22px; height: 22px; margin: 0; }
+  .consent span { min-width: 0; overflow-wrap: anywhere; }
+  .summary { grid-template-columns: minmax(0, 1fr); }
+  .summary-card { width: 100%; padding: 14px; }
+  .summary-card header { min-width: 0; }
+  .summary-edit { flex: 0 0 auto; padding-inline: 8px; }
+  .summary-detail { grid-template-columns: minmax(0, 1fr); gap: 3px; }
+  .summary-detail strong { word-break: break-word; }
+  .form-actions { flex-direction: column; gap: 10px; }
+  .form-actions .button { width: 100%; min-width: 0; min-height: 52px; padding-inline: 12px; white-space: normal; text-align: center; line-height: 1.35; }
+  .form-actions #next-step, .form-actions #submit-form { order: 1; }
+  .form-actions .button-ghost { order: 2; margin: 0; }
+  .success-state { width: 100%; padding: 28px 0 12px; }
+  .success-state h3 { font-size: clamp(24px, 8vw, 34px); overflow-wrap: anywhere; }
+  .ticket { width: 100%; margin-block: 26px; padding: 20px 16px; }
+  .ticket > strong { font-size: clamp(22px, 8vw, 30px); }
+  .ticket div { gap: 15px; }
+  .success-state > .button { width: 100%; }
+  .footer { width: min(100%, var(--max)); grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 58px 16px calc(28px + env(safe-area-inset-bottom)); }
+  .footer h2 { overflow-wrap: anywhere; }
 }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } .reveal { opacity: 1; transform: none; } }
+
+@media (max-width: 480px) {
+  .hero { padding-inline: 14px; }
+  .hero-meta { grid-template-columns: minmax(0, 1fr); gap: 0; border-top: 1px solid var(--line); }
+  .hero-meta div, .hero-meta div:nth-child(3) { grid-column: auto; padding: 14px 0; border-right: 0; border-bottom: 1px solid var(--line); text-align: center; }
+  .hero-meta div:last-child { border-bottom: 0; }
+  .section { padding-inline: 12px; }
+  .form-shell { padding-inline: 12px; }
+  .participant-card { padding-inline: 12px; }
+  .participant-card header > span { display: none; }
+  .ticket div { flex-direction: column; }
+  .ticket div span:last-child { text-align: left; }
+}
+
+@media (max-width: 359px) {
+  .header .brand > span:last-child { font-size: 8px; }
+  .hero h1 { font-size: clamp(44px, 15vw, 54px); }
+  .sequence { font-size: 8px; }
+  .section-heading h2, .registration-intro h2 { font-size: 36px; }
+  .form-shell { padding-inline: 10px; }
+  .progress b { width: 34px; height: 34px; }
+  .progress-current { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .participant-card { border-inline: 0; border-radius: 10px; }
+}
+
+/* Short mobile landscape: keep the hero and modal usable without forcing a huge viewport height. */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero { min-height: auto; padding-block: 100px 52px; }
+  .hero h1 { font-size: clamp(62px, 11vw, 92px); }
+  .hero-meta { margin-top: 28px; }
+  .scroll-hint { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .reveal { opacity: 1; transform: none; }
+}
