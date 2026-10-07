@@ -5,6 +5,4 @@ function section(title, step, lines) { const card = element('section', 'summary-
 export function renderReview(container, payload) {
   container.replaceChildren(section('КОМАНДА', 0, [detail('Название', payload.name), detail('Организация', organizations[payload.organization])]));
   payload.participants.forEach((participant, index) => container.append(section(index === 0 ? 'КАПИТАН' : `УЧАСТНИК ${index + 1}`, 1, [detail('Имя', `${participant.first_name} ${participant.last_name}`.trim()), detail('Телефон', participant.phone), detail('Telegram', participant.telegram), detail('Email', participant.email)])));
-  const idea = [detail('Название', payload.project_name), detail('Описание', payload.project_description)].filter(Boolean);
-  container.append(section('ИДЕЯ', 2, idea.length ? idea : [detail('', 'Будет определена позже')]));
 }

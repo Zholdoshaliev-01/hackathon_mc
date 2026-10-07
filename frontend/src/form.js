@@ -22,7 +22,8 @@ export function initForm(registrationStatus) {
   const progressCurrent = document.querySelector('#registration-progress-current');
   const closedState = document.querySelector('#registration-closed');
   const successState = document.querySelector('#success-state');
-  const stepLabels = ['Команда', 'Участники', 'Идея', 'Проверка'];
+  const stepLabels = ['Команда', 'Участники', 'Проверка'];
+  const lastStep = steps.length - 1;
   let currentStep = 0;
   let isSubmitting = false;
   let hasSuccessfulRegistration = false;
@@ -52,8 +53,6 @@ export function initForm(registrationStatus) {
   const collectData = ({ normalized = true } = {}) => ({
     name: form.elements.name.value.trim(),
     organization: form.elements.organization.value,
-    project_name: form.elements.project_name.value.trim() || null,
-    project_description: form.elements.project_description.value.trim() || null,
     consent: form.elements.consent.checked,
     participants: [0, 1, 2].map((index) => {
       const phone = form.elements[`participants[${index}][phone]`].value;
@@ -71,19 +70,19 @@ export function initForm(registrationStatus) {
   function renderStep({ focusHeading = true, preserveNotice = false } = {}) {
     steps.forEach((step, index) => step.classList.toggle('active', index === currentStep));
     progress.forEach((item, index) => { item.classList.toggle('active', index === currentStep); item.classList.toggle('complete', index < currentStep); });
-    document.querySelector('.progress-line i').style.width = `${(currentStep / 3) * 100}%`;
-    document.querySelector('#progress-count').textContent = `Шаг ${currentStep + 1} из 4`;
+    document.querySelector('.progress-line i').style.width = `${(currentStep / lastStep) * 100}%`;
+    document.querySelector('#progress-count').textContent = `Шаг ${currentStep + 1} из ${steps.length}`;
     document.querySelector('#progress-label').textContent = stepLabels[currentStep];
     previousButton.hidden = currentStep === 0;
-    nextButton.hidden = currentStep === 3;
-    submitButton.hidden = currentStep !== 3;
+    nextButton.hidden = currentStep === lastStep;
+    submitButton.hidden = currentStep !== lastStep;
     if (!preserveNotice) hideNotice();
-    if (currentStep === 3) renderReview(summary, collectData());
+    if (currentStep === lastStep) renderReview(summary, collectData());
     if (focusHeading) steps[currentStep].querySelector('legend')?.focus({ preventScroll: true });
   }
 
   function goToStep(index, options) {
-    currentStep = Math.max(0, Math.min(3, Number(index)));
+    currentStep = Math.max(0, Math.min(lastStep, Number(index)));
     renderStep(options);
     scheduleDraft();
   }
@@ -106,7 +105,6 @@ export function initForm(registrationStatus) {
   });
   form.addEventListener('input', () => { hideNotice('info'); scheduleDraft(); });
   form.addEventListener('change', scheduleDraft);
-  form.elements.project_description.addEventListener('input', updateDescriptionCount);
   notice.querySelector('.notice-close').addEventListener('click', hideNotice);
 
   form.addEventListener('submit', async (event) => {
@@ -143,7 +141,7 @@ export function initForm(registrationStatus) {
     const unique = validateParticipantDuplicates(form, { focus: false });
     if (validSteps.every(Boolean) && unique) return true;
     const invalidStep = steps.findIndex((step) => step.querySelector('[aria-invalid="true"]'));
-    goToStep(invalidStep >= 0 ? invalidStep : 3, { focusHeading: false });
+    goToStep(invalidStep >= 0 ? invalidStep : lastStep, { focusHeading: false });
     steps[currentStep].querySelector('[aria-invalid="true"]')?.focus();
     showNotice('warning', 'Проверьте данные', 'Исправьте выделенные поля перед отправкой регистрации.');
     return false;
@@ -173,17 +171,14 @@ export function initForm(registrationStatus) {
     clearTimeout(draftTimer);
     draftTimer = setTimeout(() => saveDraft(collectData({ normalized: false }), currentStep), 250);
   }
-  function updateDescriptionCount() { document.querySelector('#description-count').textContent = `${form.elements.project_description.value.length} / 3000`; }
-
   function restoreDraft() {
     const draft = loadDraft();
     if (!draft?.data || draft.version !== 1) return false;
     const data = draft.data;
-    setValue('name', data.name); setValue('organization', data.organization); setValue('project_name', data.project_name); setValue('project_description', data.project_description);
+    setValue('name', data.name); setValue('organization', data.organization);
     form.elements.consent.checked = Boolean(data.consent);
     (data.participants || []).slice(0, 3).forEach((participant, index) => Object.entries(participant).forEach(([key, value]) => setValue(`participants[${index}][${key}]`, value)));
-    currentStep = Math.max(0, Math.min(3, Number(draft.currentStep) || 0));
-    updateDescriptionCount();
+    currentStep = Math.max(0, Math.min(lastStep, Number(draft.currentStep) || 0));
     return true;
   }
   function setValue(name, value) { if (form.elements[name] && value !== null && value !== undefined) form.elements[name].value = value; }
