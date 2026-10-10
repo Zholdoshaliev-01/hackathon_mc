@@ -129,7 +129,7 @@ python -c "from pwdlib import PasswordHash; print(PasswordHash.recommended().has
 | `ADMIN_USERNAME` | Логин организатора |
 | `ADMIN_PASSWORD_HASH` | Argon2-хеш пароля, не пароль |
 | `REGISTRATION_ENABLED` | `true` для приёма заявок; `false` закрывает регистрацию вручную |
-| `REGISTRATION_DEADLINE` | Timezone-aware дедлайн ISO 8601, например `2026-10-10T13:00:00+06:00` |
+| `REGISTRATION_DEADLINE` | Timezone-aware дедлайн ISO 8601, например `2026-10-10T15:00:00+06:00` |
 | `VITE_API_BASE_URL` | Необязательный публичный URL API при отдельном frontend origin |
 
 Случайный JWT secret можно получить командой `python -c "import secrets; print(secrets.token_urlsafe(48))"`.

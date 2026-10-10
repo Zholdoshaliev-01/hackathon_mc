@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     admin_username: str = "admin"
     admin_password_hash: str
     registration_enabled: bool = True
-    registration_deadline: datetime = datetime(2026, 10, 10, 13, 0, tzinfo=timezone(timedelta(hours=6)))
+    registration_deadline: datetime = datetime(2026, 10, 10, 15, 0, tzinfo=timezone(timedelta(hours=6)))
 
     @field_validator("backend_cors_origins", mode="before")
     @classmethod
